@@ -130,9 +130,12 @@ public class VideoJSOSMF extends Sprite {
   }
 
   private function ready():void {
+    Console.log('ready()');
     if (loaderInfo.parameters['readyFunction']) {
       var cb:* = loaderInfo.parameters['readyFunction'];
-      ExternalInterface.call("function(func, id){ videojs.getComponent('Osmf')[func](id); }", cb, ExternalInterface.objectID);
+      Console.log('calling ready function: cb = ' + cb);
+      //ExternalInterface.call("function(func, id){ videojs.getComponent('Osmf')[func](id); }", cb, ExternalInterface.objectID);
+      ExternalInterface.call('videojs.Flash.onReady', ExternalInterface.objectID);
     }
   }
 
