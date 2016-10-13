@@ -7,7 +7,6 @@ npm-debug.log
 ./bin/
 ./bin-debug/
 ./bin-release/
-dist/
 
 
 # Other files and folders

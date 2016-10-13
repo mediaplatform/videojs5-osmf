@@ -6,8 +6,6 @@ const Tech = videojs.getComponent('Tech');
 class Osmf extends Flash {
     constructor(options, ready) {
         super(options, ready);
-
-        console.log('Osmf Constructor')
     }
 }
 
@@ -20,7 +18,6 @@ Osmf.formats = {
 
 Osmf.canPlaySource = function(src){
     var type = src.type.replace(/;.*/, '').toLowerCase();
-    console.log('Osmf: can play source');
     return type in Osmf.formats ? 'maybe' : '';
 };
 

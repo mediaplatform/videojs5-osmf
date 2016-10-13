@@ -8,6 +8,7 @@ module.exports = function(grunt) {
       dest: 'dist/videojs-osmf.swf',
       version: '<%= pkg.version %>'
     },
+
     shell: {
       mxmlc: {
         command: './compiler/bin/mxmlc -define+=CONFIG::VERSION,1 -define+=CONFIG::FLASH_10_1,true -define+=CONFIG::LOGGING,true -define+=CONFIG::PLATFORM,true -define+=CONFIG::MOCK,false -define+=CONFIG::DASH,true -library-path+=libs/ <%= swf.src %> -o <%= swf.dest %>',
@@ -22,6 +23,7 @@ module.exports = function(grunt) {
         }
       }
     },
+
     connect: {
       dev: {
         options: {
@@ -30,12 +32,14 @@ module.exports = function(grunt) {
         }
       }
     },
+
     open : {
       dev : {
         path: 'http://localhost:<%= connect.dev.options.port %>/example.html',
         app: 'Google Chrome'
       }
     },
+
     watch: {
       as: {
         files: ['src/as/**/*.as'],
@@ -50,24 +54,45 @@ module.exports = function(grunt) {
         tasks: ['jshint']
       }
     },
-    jshint: {
-      all: ['src/**/*.js']
-    },
-    concat: {
-      dist: {
-        src: ['src/**/*.js'],
-        dest: 'dist/videojs-osmf.js'
-      }
-    },
-    uglify : {
-      all : {
-        files: {
-          'dist/videojs-osmf.min.js' : [
-            'dist/videojs-osmf.js'
+
+    browserify: {
+      development: {
+        src: [
+          './src/js/videojs5-osmf-controller-es6.js'
+        ],
+        dest: './dist/videojs5-osmf-controller-standalone.js',
+        options: {
+          browserifyOptions: {
+            debug: true,
+            watch: true,
+            keepAlive: false,
+            standalone: 'videojs5-osmf-controller-standalone'
+          },
+          transform: [
+            ["babelify", {
+              loose: "all"
+            }]
           ]
         }
       }
     },
+
+    babel: {
+      options: {
+        sourceMap: false,
+        presets: ['es2015']
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'src',
+          src: ['**/js/videojs5-osmf-controller-es6.js'],
+          dest: 'dist/lib',
+          ext:'.js'
+        }]
+      }
+    },
+
     concurrent: {
       dev: {
         tasks: ['connect:dev', 'open', 'watch'],
@@ -82,7 +107,7 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'build', 'concat', 'uglify']);
+  grunt.registerTask('default', ['build', 'browserify', 'babel']);
   grunt.registerTask('dev', 'Launching Dev Environment', ['build','concurrent:dev']);
   grunt.registerTask('build', ['shell:mxmlc']);
 

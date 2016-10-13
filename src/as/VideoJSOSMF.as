@@ -555,16 +555,13 @@ public class VideoJSOSMF extends Sprite {
 	return netStream.decodedFrames;
 
       default:
-        Console.log('');
-        Console.log('Get Prop Called', pPropertyName);
+        Console.log('Get Prop Called: Not Found', pPropertyName);
         break;
     }
   }
 
   private function onSetPropertyCalled(pPropertyName:String = "", pValue:* = null):void {
-    Console.log('');
     Console.log('Set Prop Called', pPropertyName, pValue.toString() );
-    Console.log('');
     var _app:Object = {model: {}};
 
     switch (pPropertyName) {
@@ -630,6 +627,7 @@ public class VideoJSOSMF extends Sprite {
     Console.log('Play called on OSMF');
     if (_mediaPlayer.canPlay){
       _mediaPlayer.play();
+      Console.log('Dispatch event');
       dispatchExternalEvent('play');
     } else {
       Console.log('Can\'t play!');
@@ -669,15 +667,18 @@ public class VideoJSOSMF extends Sprite {
 
   // VideoJS Notifications
   private function dispatchExternalEvent(type:String, data:Object = null):void {
+    Console.log('dispatchExternalEvent');
     if (loaderInfo.parameters['eventProxyFunction']) {
       var cb: * = loaderInfo.parameters['eventProxyFunction'];
-      ExternalInterface.call("function(func, id, type, data){ videojs.getComponent('Osmf')[func](id, type, data); }", cb, ExternalInterface.objectID, type.toLowerCase(), data);
+      //ExternalInterface.call("function(func, id, type, data){ videojs.getComponent('Osmf')[func](id, type, data); }", cb, ExternalInterface.objectID, type.toLowerCase(), data);
+      ExternalInterface.call('videojs.Flash.onEvent', ExternalInterface.objectID, type.toLowerCase());
     }
   }
   private function dispatchExternalErrorEvent(type:String, error:Object):void {
     if(loaderInfo.parameters['errorEventProxyFunction']) {
       var cb: * = loaderInfo.parameters['eventProxyFunction'];
-      ExternalInterface.call("function(func, id, type, err){ videojs.getComponent('Osmf')[func](id, type, err); }", cb, ExternalInterface.objectID, type.toLowerCase(), error);
+      //ExternalInterface.call("function(func, id, type, err){ videojs.getComponent('Osmf')[func](id, type, err); }", cb, ExternalInterface.objectID, type.toLowerCase(), error);
+      ExternalInterface.call('videojs.Flash.onError', ExternalInterface.objectID, type.toLowerCase(), error);
     }
   }
 
