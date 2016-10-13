@@ -50,8 +50,7 @@ module.exports = function(grunt) {
         tasks: ['shell:mxmlc']
       },
       js: {
-        files: ['src/**/*.js', 'Gruntfile.js'],
-        tasks: ['jshint']
+        files: ['src/**/*.js', 'Gruntfile.js']
       }
     },
 
@@ -66,7 +65,7 @@ module.exports = function(grunt) {
             debug: true,
             watch: true,
             keepAlive: false,
-            standalone: 'videojs5-osmf-controller-standalone'
+            standalone: 'osmfStandalone'
           },
           transform: [
             ["babelify", {

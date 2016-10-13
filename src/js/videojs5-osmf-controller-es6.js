@@ -1,5 +1,5 @@
-//import videojs from 'video.js';
-import videojs from './video.js/src/js/video.js';
+import videojs from 'video.js';
+//import videojs from './video.js/src/js/video.js';
 
 const Component = videojs.getComponent('Component');
 const Flash = videojs.getComponent('Flash');
