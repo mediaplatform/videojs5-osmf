@@ -16,8 +16,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-//import videojs from './video.js/src/js/video.js';
-
 var Component = _video2.default.getComponent('Component');
 var Flash = _video2.default.getComponent('Flash');
 var Tech = _video2.default.getComponent('Tech');
@@ -28,7 +26,15 @@ var Osmf = function (_Flash) {
     function Osmf(options, ready) {
         _classCallCheck(this, Osmf);
 
-        return _possibleConstructorReturn(this, (Osmf.__proto__ || Object.getPrototypeOf(Osmf)).call(this, options, ready));
+        var _this = _possibleConstructorReturn(this, (Osmf.__proto__ || Object.getPrototypeOf(Osmf)).call(this, options, ready));
+
+        _this.initalBufferTime = options.initialBufferTime;
+        _this.ready(function () {
+            if (this.initalBufferTime) {
+                this.el_.vjs_setProperty('initalBufferTime', this.initalBufferTime);
+            }
+        }, true);
+        return _this;
     }
 
     return Osmf;
@@ -48,7 +54,7 @@ Osmf.canPlaySource = function (src) {
 
 // Create setters and getters for attributes
 var _api = Osmf.prototype;
-var _readWrite = 'rtmpConnection,rtmpStream,preload,defaultPlaybackRate,playbackRate,autoplay,loop,mediaGroup,controller,controls,volume,muted,defaultMuted'.split(',');
+var _readWrite = 'intialBufferTime,rtmpConnection,rtmpStream,preload,defaultPlaybackRate,playbackRate,autoplay,loop,mediaGroup,controller,controls,volume,muted,defaultMuted'.split(',');
 var _readOnly = 'error,seeking,played,streamType,currentLevel,levels,networkState,readyState,initialTime,startOffsetTime,paused,ended,videoWidth,videoHeight'.split(',');
 
 function _createSetter(attr) {

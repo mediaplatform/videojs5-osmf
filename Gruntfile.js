@@ -67,11 +67,7 @@ module.exports = function(grunt) {
             keepAlive: false,
             standalone: 'osmfStandalone'
           },
-          transform: [
-            ["babelify", {
-              loose: "all"
-            }]
-          ]
+          transform: [['babelify', {presets: ['es2015']}]]
         }
       }
     },
