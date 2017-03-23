@@ -28,11 +28,9 @@ var Osmf = function (_Flash) {
 
         var _this = _possibleConstructorReturn(this, (Osmf.__proto__ || Object.getPrototypeOf(Osmf)).call(this, options, ready));
 
-        _this.initalBufferTime = options.initialBufferTime;
+        _this.initialBufferTime = options.initialBufferTime || 2;
         _this.ready(function () {
-            if (this.initalBufferTime) {
-                this.el_.vjs_setProperty('initalBufferTime', this.initalBufferTime);
-            }
+            this.el_.vjs_setProperty('initialBufferTime', this.initialBufferTime);
         }, true);
         return _this;
     }
@@ -54,7 +52,7 @@ Osmf.canPlaySource = function (src) {
 
 // Create setters and getters for attributes
 var _api = Osmf.prototype;
-var _readWrite = 'intialBufferTime,rtmpConnection,rtmpStream,preload,defaultPlaybackRate,playbackRate,autoplay,loop,mediaGroup,controller,controls,volume,muted,defaultMuted'.split(',');
+var _readWrite = 'initialBufferTime,rtmpConnection,rtmpStream,preload,defaultPlaybackRate,playbackRate,autoplay,loop,mediaGroup,controller,controls,volume,muted,defaultMuted'.split(',');
 var _readOnly = 'error,seeking,played,streamType,currentLevel,levels,networkState,readyState,initialTime,startOffsetTime,paused,ended,videoWidth,videoHeight'.split(',');
 
 function _createSetter(attr) {

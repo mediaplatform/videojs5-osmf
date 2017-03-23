@@ -7,11 +7,9 @@ const Tech = videojs.getComponent('Tech');
 class Osmf extends Flash {
     constructor(options, ready) {
         super(options, ready);
-        this.initalBufferTime = options.initialBufferTime;
+        this.initialBufferTime = options.initialBufferTime || 2;
         this.ready(function(){
-            if (this.initalBufferTime) {
-                this.el_.vjs_setProperty('initalBufferTime', this.initalBufferTime);
-            }
+            this.el_.vjs_setProperty('initialBufferTime', this.initialBufferTime);
         }, true);
     }
 }
@@ -30,7 +28,7 @@ Osmf.canPlaySource = function(src){
 
 // Create setters and getters for attributes
 const _api = Osmf.prototype;
-const _readWrite = 'intialBufferTime,rtmpConnection,rtmpStream,preload,defaultPlaybackRate,playbackRate,autoplay,loop,mediaGroup,controller,controls,volume,muted,defaultMuted'.split(',');
+const _readWrite = 'initialBufferTime,rtmpConnection,rtmpStream,preload,defaultPlaybackRate,playbackRate,autoplay,loop,mediaGroup,controller,controls,volume,muted,defaultMuted'.split(',');
 const _readOnly = 'error,seeking,played,streamType,currentLevel,levels,networkState,readyState,initialTime,startOffsetTime,paused,ended,videoWidth,videoHeight'.split(',');
 
 function _createSetter(attr){

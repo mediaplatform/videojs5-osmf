@@ -69,7 +69,7 @@ public class VideoJSOSMF extends Sprite {
   private var _mediaFactory:MediaFactory;
   private var _resource:StreamingURLResource;
 
-  private var _initialBufferTime:Number = 2;
+  private var _initialBufferTime:Number;
   public function set initialBufferTime(sec:Number):void {
     this._initialBufferTime = sec;
   }
@@ -430,9 +430,11 @@ public class VideoJSOSMF extends Sprite {
 	          loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
 	      break;
           case MediaTraitType.BUFFER:
-              var bufferTrait:BufferTrait = _mediaPlayer.media.getTrait(MediaTraitType.BUFFER) as BufferTrait;
-              bufferTrait.bufferTime = this.initialBufferTime;
-              Console.log('set buffer time ' + this.initialBufferTime);
+              if (this.initialBufferTime && this.initialBufferTime > 0) {
+                  var bufferTrait:BufferTrait = _mediaPlayer.media.getTrait(MediaTraitType.BUFFER) as BufferTrait;
+                  bufferTrait.bufferTime = this.initialBufferTime;
+                  Console.log('set buffer time ' + this.initialBufferTime);
+              }
             break;
         }
         break;
@@ -578,7 +580,7 @@ public class VideoJSOSMF extends Sprite {
     var _app:Object = {model: {}};
 
     switch (pPropertyName) {
-      case "initalBufferTime":
+      case "initialBufferTime":
         this._initialBufferTime = Number(pValue);
         break;
       case "duration":
