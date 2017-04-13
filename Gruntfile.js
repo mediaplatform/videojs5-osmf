@@ -80,9 +80,10 @@ module.exports = function(grunt) {
       dist: {
         files: [{
           expand: true,
+          flatten: true,
           cwd: 'src',
           src: ['**/js/videojs5-osmf-controller-es6.js'],
-          dest: 'dist/lib',
+          dest: 'dist',
           ext:'.js'
         }]
       }

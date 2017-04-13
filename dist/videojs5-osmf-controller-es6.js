@@ -90,7 +90,7 @@ Osmf.prototype.streamStatus = function () {
 
 _video2.default.options.osmf = {};
 _video2.default.options.techOrder.push('Osmf');
-_video2.default.options.osmf.swf = 'dist/videojs-osmf.swf';
+_video2.default.options.osmf.swf = __dirname + '/videojs-osmf.swf';
 
 Component.registerComponent('Flash', Flash);
 Tech.registerTech('Osmf', Osmf);
