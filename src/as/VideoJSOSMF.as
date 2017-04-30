@@ -68,6 +68,7 @@ public class VideoJSOSMF extends Sprite {
   private var _mediaContainer:MediaContainer;
   private var _mediaFactory:MediaFactory;
   private var _resource:StreamingURLResource;
+  private var _readyState:Number = 0;
 
   private var _initialBufferTime:Number;
   public function set initialBufferTime(sec:Number):void {
@@ -144,6 +145,11 @@ public class VideoJSOSMF extends Sprite {
       Console.log('calling ready function: cb = ' + cb);
       //ExternalInterface.call("function(func, id){ videojs.getComponent('Osmf')[func](id); }", cb, ExternalInterface.objectID);
       ExternalInterface.call('videojs.Flash.onReady', ExternalInterface.objectID);
+    }
+    if (loaderInfo.parameters['autoplay'] == "true") {
+        Console.log('ready() loaderInfo.parameters[\'autoplay\']: ' + loaderInfo.parameters['autoplay']);
+        _mediaPlayer.autoPlay = true;
+        onPlayCalled();
     }
   }
 
@@ -306,7 +312,11 @@ public class VideoJSOSMF extends Sprite {
     Console.log('onMediaPlayerStateChangeEvent', event.toString());
     switch (event.state) {
       case MediaPlayerState.READY:
-        dispatchExternalEvent('canplay');
+          _readyState = 4;
+          if (_mediaPlayer.autoPlay) {
+              onPlayCalled();
+          }
+          dispatchExternalEvent('canplay');
         break;
       case MediaPlayerState.PLAYING:
       case MediaPlayerState.PAUSED:
@@ -364,7 +374,8 @@ public class VideoJSOSMF extends Sprite {
     Console.log('onPlayEvent', event.toString());
     switch(event.type) {
       case PlayEvent.PLAY_STATE_CHANGE:
-        dispatchExternalEvent(event.playState);
+          dispatchExternalEvent('play');
+          dispatchExternalEvent(event.playState);
         break;
     }
   }
@@ -526,48 +537,56 @@ public class VideoJSOSMF extends Sprite {
   private function onGetPropertyCalled(pPropertyName:String):* {
     //Console.log('Get Prop Called', pPropertyName);
     switch (pPropertyName) {
-      case 'seeking':
-        return (_mediaPlayer) ? _mediaPlayer.seeking : false;
-        break;
+        case 'seeking':
+            return (_mediaPlayer) ? _mediaPlayer.seeking : false;
+            break;
 
-      case 'muted':
-        return (_mediaPlayer) ? _mediaPlayer.muted : false;
-        break;
+        case 'muted':
+            return (_mediaPlayer) ? _mediaPlayer.muted : false;
+            break;
 
-      case 'currentLevel':
-        return _mediaPlayer ? _mediaPlayer.currentDynamicStreamIndex : undefined;
+        case 'currentLevel':
+            return _mediaPlayer ? _mediaPlayer.currentDynamicStreamIndex : undefined;
 
-      case 'levels':
-        return getLevels();
+        case 'levels':
+            return getLevels();
 
-      case 'streamType':
-        var loadTrait:LoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as LoadTrait;
-        return (loadTrait.resource as StreamingURLResource).streamType;
+        case 'streamType':
+            var loadTrait: LoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as LoadTrait;
+            return (loadTrait.resource as StreamingURLResource).streamType;
 
-      case 'volume':
-        return (_mediaPlayer) ? _mediaPlayer.volume : 0;
-        break;
+        case 'volume':
+            return (_mediaPlayer) ? _mediaPlayer.volume : 0;
+            break;
 
-      case 'currentTime':
-        return (_mediaPlayer) ? _mediaPlayer.currentTime : 0;
-        break;
+        case 'currentTime':
+            return (_mediaPlayer) ? _mediaPlayer.currentTime : 0;
+            break;
 
-      case 'duration':
-        return (_mediaPlayer) ? _mediaPlayer.duration : 0;
-        break;
+        case 'duration':
+            return (_mediaPlayer) ? _mediaPlayer.duration : 0;
+            break;
 
-      case 'buffered':
-        return (_mediaPlayer) ? [[0, +_mediaPlayer.currentTime + _mediaPlayer.bufferLength]] : [];
-        break;
+        case 'buffered':
+            return (_mediaPlayer) ? [[0, +_mediaPlayer.currentTime + _mediaPlayer.bufferLength]] : [];
+            break;
 
-      case 'decodedFrames':
-        if (!_mediaPlayer)
-	  return;
-        var nsLoadTrait: NetStreamLoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
-	if (!nsLoadTrait)
-	  return;
-        var netStream: NetStream = nsLoadTrait.netStream;
-	return netStream.decodedFrames;
+        case "readyState":
+            return _readyState;
+            break;
+
+        case "autoplay":
+            return _mediaPlayer.autoPlay;
+            break;
+
+        case 'decodedFrames':
+            if (!_mediaPlayer)
+                return;
+            var nsLoadTrait: NetStreamLoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+            if (!nsLoadTrait)
+                return;
+            var netStream: NetStream = nsLoadTrait.netStream;
+            return netStream.decodedFrames;
 
       default:
         Console.log('Get Prop Called: Not Found', pPropertyName);
@@ -580,60 +599,66 @@ public class VideoJSOSMF extends Sprite {
     var _app:Object = {model: {}};
 
     switch (pPropertyName) {
-      case "initialBufferTime":
-        this._initialBufferTime = Number(pValue);
-        break;
-      case "duration":
-        _app.model.duration = Number(pValue);
-        break;
-      case "mode":
-        _app.model.mode = String(pValue);
-        break;
-      case "loop":
-        _app.model.loop = _app.model.humanToBoolean(pValue);
-        break;
-      case "background":
-        _app.model.backgroundColor = _app.model.hexToNumber(String(pValue));
-        _app.model.backgroundAlpha = 1;
-        break;
-      case "eventProxyFunction":
-        _app.model.jsEventProxyName = String(pValue);
-        break;
-      case "errorEventProxyFunction":
-        _app.model.jsErrorEventProxyName = String(pValue);
-        break;
-      case "preload":
-        _app.model.preload = _app.model.humanToBoolean(pValue);
-        break;
-      case "poster":
-        _app.model.poster = String(pValue);
-        break;
-      case "src":
-        // same as when vjs_src() is called directly
-        onSrcCalled(pValue);
-        break;
-      case "currentTime":
-        _mediaPlayer.seek(Number(pValue));
-        break;
-      case "currentPercent":
-        _app.model.seekByPercent(Number(pValue));
-        break;
-      case "muted":
-        _mediaPlayer.muted = (pValue.toString() === 'true');
-        break;
-      case "volume":
-        _mediaPlayer.volume = pValue as Number;
-        break;
-      case "rtmpConnection":
-        _app.model.rtmpConnectionURL = String(pValue);
-        break;
-      case "rtmpStream":
-        _app.model.rtmpStream = String(pValue);
-        break;
-      default:
-        Console.log('Prop not found');
-        //_app.model.broadcastErrorEventExternally(ExternalErrorEventName.PROPERTY_NOT_FOUND, pPropertyName);
-        break;
+        case "initialBufferTime":
+            this._initialBufferTime = Number(pValue);
+            break;
+        case "duration":
+            _app.model.duration = Number(pValue);
+            break;
+        case "mode":
+            _app.model.mode = String(pValue);
+            break;
+        case "loop":
+            _app.model.loop = _app.model.humanToBoolean(pValue);
+            break;
+        case "background":
+            _app.model.backgroundColor = _app.model.hexToNumber(String(pValue));
+            _app.model.backgroundAlpha = 1;
+            break;
+        case "eventProxyFunction":
+            _app.model.jsEventProxyName = String(pValue);
+            break;
+        case "errorEventProxyFunction":
+            _app.model.jsErrorEventProxyName = String(pValue);
+            break;
+        case "preload":
+            _app.model.preload = _app.model.humanToBoolean(pValue);
+            break;
+        case "poster":
+            _app.model.poster = String(pValue);
+            break;
+        case "src":
+            // same as when vjs_src() is called directly
+            onSrcCalled(pValue);
+            break;
+        case "currentTime":
+            _mediaPlayer.seek(Number(pValue));
+            break;
+        case "currentPercent":
+            _app.model.seekByPercent(Number(pValue));
+            break;
+        case "muted":
+            _mediaPlayer.muted = (pValue.toString() === 'true');
+            break;
+        case "autoplay":
+            _mediaPlayer.autoPlay = (pValue.toString() === 'true');
+            if (_mediaPlayer.autoPlay){
+                onPlayCalled();
+            }
+            break;
+        case "volume":
+            _mediaPlayer.volume = pValue as Number;
+            break;
+        case "rtmpConnection":
+            _app.model.rtmpConnectionURL = String(pValue);
+            break;
+        case "rtmpStream":
+            _app.model.rtmpStream = String(pValue);
+            break;
+        default:
+            Console.log('Prop not found');
+            //_app.model.broadcastErrorEventExternally(ExternalErrorEventName.PROPERTY_NOT_FOUND, pPropertyName);
+            break;
     }
   }
 
