@@ -83,6 +83,12 @@ Osmf.prototype.paused = function () {
     return this.el_.vjs_paused();
 };
 
+Osmf.prototype.setCurrentTime = function (time) {
+    if (time) {
+        Flash.setCurrentTime(time);
+    }
+};
+
 //Not sure this function is needed
 Osmf.prototype.streamStatus = function () {
     return this.el_.streamStatus();
