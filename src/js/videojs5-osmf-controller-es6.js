@@ -70,6 +70,16 @@ Osmf.prototype.streamStatus = function(){
     return this.el_.streamStatus();
 };
 
+let originalTrigger = Osmf.prototype.trigger;
+Osmf.prototype.trigger = function (eventName, args) {
+    if (this.el_){
+        originalTrigger.call(this, eventName, args);
+    }
+    else {
+        console.log('OSMF trigger: this.el_ is null. Dont need to dispatch anymore events. eventName: ' + eventName);
+    }
+};
+
 videojs.options.osmf = {};
 videojs.options.techOrder.push('Osmf');
 
