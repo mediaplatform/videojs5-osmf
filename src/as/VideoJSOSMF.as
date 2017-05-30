@@ -325,7 +325,10 @@ public class VideoJSOSMF extends Sprite {
         break;
       case MediaPlayerState.BUFFERING:
       case MediaPlayerState.PLAYBACK_ERROR:
+            break;
       case MediaPlayerState.LOADING:
+            dispatchExternalEvent('loadstart');
+            break;
       case MediaPlayerState.UNINITIALIZED:
         dispatchExternalEvent(event.state);
         break;
@@ -460,7 +463,6 @@ public class VideoJSOSMF extends Sprite {
   {
       switch (event.loadState) {
           case LoadState.LOADING:
-              dispatchExternalEvent('loadstart');
               break;
           case LoadState.READY:
               var loadTrait:NetStreamLoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
