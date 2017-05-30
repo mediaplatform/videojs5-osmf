@@ -458,11 +458,15 @@ public class VideoJSOSMF extends Sprite {
 
   protected function onLoadStateChange(event: LoadEvent): void
   {
-      if (event.loadState == LoadState.READY)
-      {
-          var loadTrait:NetStreamLoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
-          var netStream: NetStream = loadTrait.netStream;
-          netStream.addEventListener(HTTPStreamingEvent.DOWNLOAD_COMPLETE, onDownloadComplete);		  
+      switch (event.loadState) {
+          case LoadState.LOADING:
+              dispatchExternalEvent('loadstart');
+              break;
+          case LoadState.READY:
+              var loadTrait:NetStreamLoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+              var netStream: NetStream = loadTrait.netStream;
+              netStream.addEventListener(HTTPStreamingEvent.DOWNLOAD_COMPLETE, onDownloadComplete);
+              break;
       }
   }
 
@@ -710,7 +714,7 @@ public class VideoJSOSMF extends Sprite {
 
   // VideoJS Notifications
   private function dispatchExternalEvent(type:String, data:Object = null):void {
-    Console.log('dispatchExternalEvent');
+    Console.log('dispatchExternalEvent: ' + type);
     if (loaderInfo.parameters['eventProxyFunction']) {
       var cb: * = loaderInfo.parameters['eventProxyFunction'];
       //ExternalInterface.call("function(func, id, type, data){ videojs.getComponent('Osmf')[func](id, type, data); }", cb, ExternalInterface.objectID, type.toLowerCase(), data);
