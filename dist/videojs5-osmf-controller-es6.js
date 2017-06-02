@@ -53,7 +53,7 @@ Osmf.canPlaySource = function (src) {
 // Create setters and getters for attributes
 var _api = Osmf.prototype;
 var _readWrite = 'initialBufferTime,rtmpConnection,rtmpStream,preload,defaultPlaybackRate,playbackRate,autoplay,loop,mediaGroup,controller,controls,volume,muted,defaultMuted'.split(',');
-var _readOnly = 'error,seeking,played,streamType,currentLevel,levels,networkState,readyState,initialTime,startOffsetTime,paused,ended,videoWidth,videoHeight'.split(',');
+var _readOnly = 'seeking,played,streamType,currentLevel,levels,networkState,readyState,initialTime,startOffsetTime,paused,ended,videoWidth,videoHeight'.split(',');
 
 function _createSetter(attr) {
     var attrUpper = attr.charAt(0).toUpperCase() + attr.slice(1);

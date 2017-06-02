@@ -29,7 +29,7 @@ Osmf.canPlaySource = function(src){
 // Create setters and getters for attributes
 const _api = Osmf.prototype;
 const _readWrite = 'initialBufferTime,rtmpConnection,rtmpStream,preload,defaultPlaybackRate,playbackRate,autoplay,loop,mediaGroup,controller,controls,volume,muted,defaultMuted'.split(',');
-const _readOnly = 'error,seeking,played,streamType,currentLevel,levels,networkState,readyState,initialTime,startOffsetTime,paused,ended,videoWidth,videoHeight'.split(',');
+const _readOnly = 'seeking,played,streamType,currentLevel,levels,networkState,readyState,initialTime,startOffsetTime,paused,ended,videoWidth,videoHeight'.split(',');
 
 function _createSetter(attr){
     var attrUpper = attr.charAt(0).toUpperCase() + attr.slice(1);
