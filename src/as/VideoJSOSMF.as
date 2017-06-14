@@ -38,6 +38,8 @@ import org.osmf.metadata.Metadata;
 import org.osmf.net.httpstreaming.f4f.HolaFragmentsHelper;
 import org.osmf.elements.f4mClasses.BootstrapInfo;
 
+import org.osmf.net.NetClient;
+
 CONFIG::DASH
 import com.castlabs.dash.DashPluginInfo;
 
@@ -372,6 +374,24 @@ public class VideoJSOSMF extends Sprite {
         break;
     }
   }
+  private function handleScriptCommand(cmd:Object):void
+  {
+    Console.log('ScriptCommand', cmd.toString());
+    if(ExternalInterface.available)
+    {
+      //ExternalInterface.call("videojs.Osmf.Flash_ScriptCommand", cmd.toString());
+      //ExternalInterface.call("videojs.Osmf.VIDEO_ScriptCommand", cmd.toString());
+      ExternalInterface.call("videojs.Osmf.NS_ScriptCommand", cmd.toString());
+    }
+  }
+  private function handleOverlay(cmd:Object):void
+  {
+    Console.log('OverlayCommand', cmd.toString());
+    if(ExternalInterface.available)
+    {
+      ExternalInterface.call("videojs.Osmf.NS_OverlayCommand", cmd);
+    }
+  }
 
   private function onPlayEvent(event:PlayEvent):void {
     Console.log('onPlayEvent', event.toString());
@@ -404,7 +424,7 @@ public class VideoJSOSMF extends Sprite {
 
   private function onDRMEvent(event:DRMEvent):void {
     Console.log('onDRMEvent', event.drmState);
-    Console.log(event.toString());
+   // Console.log(event.toString());
   }
 
   private function onLayoutTargetEvent(event:LayoutTargetEvent):void {
@@ -463,12 +483,23 @@ public class VideoJSOSMF extends Sprite {
   {
       switch (event.loadState) {
           case LoadState.LOADING:
-              break;
+            break;
           case LoadState.READY:
-              var loadTrait:NetStreamLoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
-              var netStream: NetStream = loadTrait.netStream;
-              netStream.addEventListener(HTTPStreamingEvent.DOWNLOAD_COMPLETE, onDownloadComplete);
-              break;
+            //var loadTrait:NetStreamLoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+            var loadTrait:NetStreamLoadTrait = event.target as NetStreamLoadTrait;
+            //Added by Parisi for WC-4743
+            if(loadTrait != null)
+            {
+              var netStream:NetStream = loadTrait.netStream;
+              if(netStream)
+              {
+                netStream.addEventListener(HTTPStreamingEvent.DOWNLOAD_COMPLETE, onDownloadComplete);
+              }
+
+              NetClient(loadTrait.netStream.client).addHandler("ScriptCommand", handleScriptCommand);
+              NetClient(loadTrait.netStream.client).addHandler("OverlayCommand", handleOverlay);
+            }
+            break;
       }
   }
 
@@ -541,7 +572,7 @@ public class VideoJSOSMF extends Sprite {
   }
 
   private function onGetPropertyCalled(pPropertyName:String):* {
-    //Console.log('Get Prop Called', pPropertyName);
+    Console.log('Get Prop Called', pPropertyName);
     switch (pPropertyName) {
         case 'seeking':
             return (_mediaPlayer) ? _mediaPlayer.seeking : false;

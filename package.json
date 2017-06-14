@@ -1,6 +1,6 @@
 {
-  "name": "@hola.org/videojs-osmf",
-  "version": "0.0.0-33",
+  "name": "videojs5-osmf",
+  "version": "0.0.0-44",
   "description": "A Video.js media controller for OSMF",
   "main": "videojs-osmf.js",
   "scripts": {
@@ -40,8 +40,7 @@
     "grunt-shell": "0.6.1",
     "grunt-concurrent": "0.4.3",
     "load-grunt-tasks": "~0.4.0",
-    "npm-run-all": "^3.1.0",
-    "@hola.org/video.js": ">=5.10.2-16 <5.10.2"
+    "npm-run-all": "^3.1.0"
   }
 }
 

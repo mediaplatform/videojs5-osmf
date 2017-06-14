@@ -54,40 +54,40 @@ module.exports = function(grunt) {
       }
     },
 
-    browserify: {
-      development: {
-        src: [
-          './src/js/videojs5-osmf-controller-es6.js'
-        ],
-        dest: './dist/videojs5-osmf-controller-standalone.js',
-        options: {
-          browserifyOptions: {
-            debug: true,
-            watch: true,
-            keepAlive: false,
-            standalone: 'osmfStandalone'
-          },
-          transform: [['babelify', {presets: ['es2015']}]]
-        }
-      }
-    },
+    // browserify: {
+    //   development: {
+    //     src: [
+    //       './src/js/videojs5-osmf-controller-es6.js'
+    //     ],
+    //     dest: './dist/videojs5-osmf-controller-standalone.js',
+    //     options: {
+    //       browserifyOptions: {
+    //         debug: true,
+    //         watch: true,
+    //         keepAlive: false,
+    //         standalone: 'osmfStandalone'
+    //       },
+    //       transform: [['babelify', {presets: ['es2015']}]]
+    //     }
+    //   }
+    // },
 
-    babel: {
-      options: {
-        sourceMap: false,
-        presets: ['es2015']
-      },
-      dist: {
-        files: [{
-          expand: true,
-          flatten: true,
-          cwd: 'src',
-          src: ['**/js/videojs5-osmf-controller-es6.js'],
-          dest: 'dist',
-          ext:'.js'
-        }]
-      }
-    },
+    // babel: {
+    //   options: {
+    //     sourceMap: false,
+    //     presets: ['es2015']
+    //   },
+    //   dist: {
+    //     files: [{
+    //       expand: true,
+    //       flatten: true,
+    //       cwd: 'src',
+    //       src: ['**/js/videojs5-osmf-controller-es6.js'],
+    //       dest: 'dist',
+    //       ext:'.js'
+    //     }]
+    //   }
+    // },
 
     concurrent: {
       dev: {
@@ -103,7 +103,8 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
   // Default task.
-  grunt.registerTask('default', ['build', 'browserify', 'babel']);
+  grunt.registerTask('default', ['build']);
+  //grunt.registerTask('default', ['build', 'browserify', 'babel']);
   grunt.registerTask('dev', 'Launching Dev Environment', ['build','concurrent:dev']);
   grunt.registerTask('build', ['shell:mxmlc']);
 
