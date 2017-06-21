@@ -161,7 +161,7 @@ public class VideoJSOSMF extends Sprite {
     _mediaPlayer.autoPlay = false;
     _mediaPlayer.autoRewind = false;
     _mediaPlayer.loop = false;
-    _mediaPlayer.currentTimeUpdateInterval = 100;
+    _mediaPlayer.currentTimeUpdateInterval = 250;
     _mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onAudioEvent);
     _mediaPlayer.addEventListener(AudioEvent.VOLUME_CHANGE, onAudioEvent);
     _mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferEvent);
