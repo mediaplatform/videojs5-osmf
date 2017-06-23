@@ -38,6 +38,7 @@ import org.osmf.metadata.Metadata;
 import org.osmf.net.httpstreaming.f4f.HolaFragmentsHelper;
 import org.osmf.elements.f4mClasses.BootstrapInfo;
 
+import org.osmf.net.ExtendedMediaFactory;
 import org.osmf.net.NetClient;
 
 CONFIG::DASH
@@ -197,8 +198,8 @@ public class VideoJSOSMF extends Sprite {
 
   private function onDownloadComplete(event: HTTPStreamingEvent): void
   {
-      if (event.downloader.type == HTTPStreamDownloader.INDEX)
-          dispatchExternalEvent('manifestloaded', {url: event.url}); 
+      //if (event.downloader.type == HTTPStreamDownloader.INDEX)
+        //  dispatchExternalEvent('manifestloaded', {url: event.url}); 
   }
 
   private function createMediaElement():void {
@@ -601,6 +602,7 @@ public class VideoJSOSMF extends Sprite {
             break;
 
         case 'duration':
+          Console.log('get duration', _mediaPlayer.duration);
             return (_mediaPlayer) ? _mediaPlayer.duration : 0;
             break;
 
@@ -640,6 +642,7 @@ public class VideoJSOSMF extends Sprite {
             this._initialBufferTime = Number(pValue);
             break;
         case "duration":
+          Console.log('set duration', Number(pValue));
             _app.model.duration = Number(pValue);
             break;
         case "mode":
