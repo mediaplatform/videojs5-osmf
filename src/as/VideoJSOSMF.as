@@ -1,4 +1,5 @@
 package {
+
 import com.videojs.utils.Console;
 
 import flash.display.Sprite;
@@ -308,8 +309,7 @@ public class VideoJSOSMF extends Sprite {
   }
 
   private function onBufferEvent(event:BufferEvent):void {
-    Console.log('onBufferEvent', event.toString());
-      Console.log('onBufferEvent' + ' ' + _mediaPlayer.bufferLength);
+    Console.log('onBufferEvent', event.toString() + ' ' + 'bufferLength: ' + _mediaPlayer.bufferLength);
   }
 
   private function onMediaPlayerStateChangeEvent(event:MediaPlayerStateChangeEvent):void {
@@ -324,11 +324,14 @@ public class VideoJSOSMF extends Sprite {
         break;
       case MediaPlayerState.PLAYING:
       case MediaPlayerState.PAUSED:
-        dispatchExternalEvent(event.state);
-        dispatchExternalEvent('canplay');
-        break;
+            dispatchExternalEvent(event.state);
+            dispatchExternalEvent('canplay');
+          break;
       case MediaPlayerState.BUFFERING:
+            dispatchExternalEvent('waiting');
+            break;
       case MediaPlayerState.PLAYBACK_ERROR:
+            dispatchExternalErrorEvent(event.state, 'error');
             break;
       case MediaPlayerState.LOADING:
             dispatchExternalEvent('loadstart');
@@ -358,8 +361,15 @@ public class VideoJSOSMF extends Sprite {
         dispatchExternalEvent('ended');
         break;
 
-      case TimeEvent.CURRENT_TIME_CHANGE:
-        dispatchExternalEvent('timeupdate');
+        case TimeEvent.CURRENT_TIME_CHANGE:
+          /*
+             A waiting event is dispatched when buffering begins.
+             The buffering and timeupdate events can get out of sync.
+             Video.js doesn't expect any timeupdates when in buffering state
+           */
+          if (!_mediaPlayer.buffering) {
+              dispatchExternalEvent('timeupdate');
+          }
         break;
 
       case TimeEvent.DURATION_CHANGE:
