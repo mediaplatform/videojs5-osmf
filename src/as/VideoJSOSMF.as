@@ -309,10 +309,11 @@ public class VideoJSOSMF extends Sprite {
 
   private function onBufferEvent(event:BufferEvent):void {
     Console.log('onBufferEvent', event.toString());
+      Console.log('onBufferEvent' + ' ' + _mediaPlayer.bufferLength);
   }
 
   private function onMediaPlayerStateChangeEvent(event:MediaPlayerStateChangeEvent):void {
-    Console.log('onMediaPlayerStateChangeEvent', event.toString());
+    Console.log('onMediaPlayerStateChangeEvent', event.state.toString());
     switch (event.state) {
       case MediaPlayerState.READY:
           _readyState = 4;
@@ -573,7 +574,7 @@ public class VideoJSOSMF extends Sprite {
   }
 
   private function onGetPropertyCalled(pPropertyName:String):* {
-    Console.log('Get Prop Called', pPropertyName);
+    //Console.log('Get Prop Called', pPropertyName);
     switch (pPropertyName) {
         case 'seeking':
             return (_mediaPlayer) ? _mediaPlayer.seeking : false;
