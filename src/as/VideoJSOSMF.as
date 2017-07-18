@@ -822,6 +822,7 @@ public class VideoJSOSMF extends Sprite {
       var cb: * = loaderInfo.parameters['eventProxyFunction'];
       //ExternalInterface.call("function(func, id, type, data){ videojs.getComponent('Osmf')[func](id, type, data); }", cb, ExternalInterface.objectID, type.toLowerCase(), data);
       ExternalInterface.call('videojs.Flash.onEvent', ExternalInterface.objectID, type.toLowerCase());
+      ExternalInterface.call('videojs.Osmf.onEvent', ExternalInterface.objectID, type.toLowerCase());
     }
   }
   private function dispatchExternalErrorEvent(type:String, error:Object):void {
