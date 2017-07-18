@@ -555,7 +555,8 @@ public class VideoJSOSMF extends Sprite {
               if(netStream)
               {
                 netStream.addEventListener(HTTPStreamingEvent.DOWNLOAD_COMPLETE, onDownloadComplete);
-                netStream.addEventListener(NetStatusEvent.NET_STATUS, handleNetStatus)
+                netStream.addEventListener(NetStatusEvent.NET_STATUS, handleNetStatus);
+                loadTrait.connection.addEventListener(NetStatusEvent.NET_STATUS, handleNetStatus);
               }
 
               NetClient(loadTrait.netStream.client).addHandler("ScriptCommand", handleScriptCommand);
