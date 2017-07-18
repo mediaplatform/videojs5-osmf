@@ -268,7 +268,7 @@ public class VideoJSOSMF extends Sprite {
   private function createResource(url:String):void {
     Console.log('Create Resource');
 
-    var resource:StreamingURLResource;
+    //var resource:StreamingURLResource;
     var urlIncludesFMSApplicationInstance:Boolean;
     var newURL:String = StringUtils.trim(unescape(url));
     var vo:Object = {};
@@ -291,14 +291,16 @@ public class VideoJSOSMF extends Sprite {
 				    newURL = "rtmfp:";
 				}
 
-				resource = new MulticastResource(newURL);
-				if(resource != null)
+				_resource = new MulticastResource(newURL);
+				if(_resource != null)
 				{
 
-          Console.log('Multicast resource: ' + resource);
-					MulticastResource(resource).groupspec = vo.groupspec;
-					MulticastResource(resource).streamName = vo.streamname;
-					MulticastResource(resource).urlIncludesFMSApplicationInstance = urlIncludesFMSApplicationInstance
+          Console.log('Multicast resource: ' + _resource);
+					MulticastResource(_resource).groupspec = vo.groupspec;
+					MulticastResource(_resource).streamName = vo.streamname;
+					MulticastResource(_resource).urlIncludesFMSApplicationInstance = urlIncludesFMSApplicationInstance;
+
+          //_resource = resource;
 				}
 
 			}
