@@ -295,6 +295,7 @@ public class VideoJSOSMF extends Sprite {
 				if(resource != null)
 				{
 
+          Console.log('Multicast resource: ' + resource);
 					MulticastResource(resource).groupspec = vo.groupspec;
 					MulticastResource(resource).streamName = vo.streamname;
 					MulticastResource(resource).urlIncludesFMSApplicationInstance = urlIncludesFMSApplicationInstance
