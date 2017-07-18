@@ -42,6 +42,9 @@ import org.osmf.elements.f4mClasses.BootstrapInfo;
 import org.osmf.net.ExtendedMediaFactory;
 import org.osmf.net.NetClient;
 
+import com.mediaplatform.util.*;
+import org.osmf.net.MulticastResource;
+
 CONFIG::DASH
 import com.castlabs.dash.DashPluginInfo;
 
@@ -200,7 +203,7 @@ public class VideoJSOSMF extends Sprite {
   private function onDownloadComplete(event: HTTPStreamingEvent): void
   {
       //if (event.downloader.type == HTTPStreamDownloader.INDEX)
-        //  dispatchExternalEvent('manifestloaded', {url: event.url}); 
+        //  dispatchExternalEvent('manifestloaded', {url: event.url});
   }
 
   private function createMediaElement():void {
@@ -264,7 +267,48 @@ public class VideoJSOSMF extends Sprite {
 
   private function createResource(url:String):void {
     Console.log('Create Resource');
-    _resource = new StreamingURLResource(url, StreamType.LIVE_OR_RECORDED);
+
+    var resource:StreamingURLResource;
+    var urlIncludesFMSApplicationInstance:Boolean;
+    var newURL:String = StringUtils.trim(unescape(url));
+    var vo:Object = {};
+
+    Console.log('Create Resource with url: ' + newURL);
+
+		//var clipStartTime:Number = NaN;
+		//var clipEndTime:Number = NaN;
+
+    urlIncludesFMSApplicationInstance = NetUtils.parseURLForAppInstance(newURL);
+
+    //if(_player.inPoint > 0)clipStartTime = _player.inPoint;
+		//if(_player.outPoint > 0)clipEndTime = _player.outPoint;
+
+    if(NetUtils.isRTMFPStream(newURL))
+		 {
+				newURL = NetUtils.parseMulticastURL(newURL, vo);
+				if(vo.type === 2)
+				{
+				    newURL = "rtmfp:";
+				}
+
+				resource = new MulticastResource(newURL);
+				if(resource != null)
+				{
+
+					MulticastResource(resource).groupspec = vo.groupspec;
+					MulticastResource(resource).streamName = vo.streamname;
+					MulticastResource(resource).urlIncludesFMSApplicationInstance = urlIncludesFMSApplicationInstance
+				}
+
+			}
+      else
+			{
+        //We will need to add in/out points here in the future - mparisi
+				//url = NetUtils.parseProtocol(url, _playerVO);
+				//resource = new StreamingURLResource(LegacySupportUtil.checkRules(url), null, clipStartTime, clipEndTime);
+        _resource = new StreamingURLResource(url, StreamType.LIVE_OR_RECORDED);
+			}
+
   }
 
   private function createMediaFactory():void {
