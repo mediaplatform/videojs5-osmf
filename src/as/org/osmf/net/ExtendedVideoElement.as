@@ -23,7 +23,7 @@ package org.osmf.net
 		private var _stream:NetStream;
 		private var _videoSurface:VideoSurface;
 		//private var stream:NetStream;
-		
+
 		public function ExtendedVideoElement(resource:MediaResourceBase=null, loader:NetLoader=null)
 		{
 			super(null, null);
@@ -35,17 +35,17 @@ package org.osmf.net
 			//_vars = this.resource.getMetadataValue("vars");
 			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 			_stream = loadTrait.netStream;
-		
+
 			_videoSurface = new VideoSurface(OSMFSettings.enableStageVideo && OSMFSettings.supportsStageVideo, createVideo);
 			//_videoSurface.smoothing = _smoothing;
 			//_videoSurface.deblocking = _deblocking;
 
 			_videoSurface.attachNetStream(_stream);
-			
+
 			//_stream.addEventListener(AsyncErrorEvent.ASYNC_ERROR, handleAsyncError)
 			//_stream.addEventListener(IOErrorEvent.IO_ERROR, handleIOError);
 			//_stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent, false, 0, true);
-			
+
 			//function handleAsyncError(evt:AsyncErrorEvent):void
 			//{
 			//	trace(evt.text);
@@ -56,18 +56,18 @@ package org.osmf.net
 			//}
 			finishLoad();
 		}
-			
+
 		private function finishLoad():void
 		{
 			var loadTrait:NetStreamLoadTrait = getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
-			
+
 			// setup dvr trait
 			var dvrTrait:MediaTraitBase = loadTrait.getTrait(MediaTraitType.DVR) as DVRTrait;
 			if (dvrTrait != null)
 			{
 				addTrait(MediaTraitType.DVR, dvrTrait);
 			}
-			
+
 			// setup audio trait
 			var audioTrait:MediaTraitBase = loadTrait.getTrait(MediaTraitType.AUDIO) as AudioTrait;
 			if (audioTrait == null)
@@ -75,7 +75,7 @@ package org.osmf.net
 				audioTrait = new NetStreamAudioTrait(_stream);
 			}
 			addTrait(MediaTraitType.AUDIO, audioTrait);
-			
+
 			// setup buffer trait
 			var bufferTrait:BufferTrait = loadTrait.getTrait(MediaTraitType.BUFFER) as BufferTrait;
 			if (bufferTrait == null)
@@ -83,36 +83,36 @@ package org.osmf.net
 				bufferTrait = new NetStreamBufferTrait(_stream, _videoSurface);
 			}
 			addTrait(MediaTraitType.BUFFER, bufferTrait);
-			
-			
+
+
 			// setup time trait
-			var timeTrait:TimeTrait = loadTrait.getTrait(MediaTraitType.TIME) as TimeTrait; 
+			var timeTrait:TimeTrait = loadTrait.getTrait(MediaTraitType.TIME) as TimeTrait;
 			if (timeTrait == null)
 			{
 				//timeTrait = new NetStreamTimeTrait(stream, loadTrait.resource, defaultDuration);
 				timeTrait = new ExtendedTimeTrait(_stream, loadTrait.resource, defaultDuration);
 			}
 			addTrait(MediaTraitType.TIME, timeTrait);
-			
+
 			// setup display object trait
 			var displayObjectTrait:DisplayObjectTrait = loadTrait.getTrait(MediaTraitType.DISPLAY_OBJECT) as DisplayObjectTrait;
 			if (displayObjectTrait == null)
 			{
-				displayObjectTrait = new NetStreamDisplayObjectTrait(_stream, _videoSurface, NaN, NaN); 
+				displayObjectTrait = new NetStreamDisplayObjectTrait(_stream, _videoSurface, NaN, NaN);
 			}
 			addTrait(MediaTraitType.DISPLAY_OBJECT,	displayObjectTrait);
-			
+
 			// setup play trait
 			var playTrait:PlayTrait = loadTrait.getTrait(MediaTraitType.PLAY) as PlayTrait;
 			if (playTrait == null)
 			{
 				var reconnectStreams:Boolean = false;
-				CONFIG::FLASH_10_1	
+				CONFIG::FLASH_10_1
 				{
 					reconnectStreams = (loader as NetLoader).reconnectStreams;
 				}
 				playTrait = new NetStreamPlayTrait(_stream, resource, reconnectStreams, loadTrait.connection);
-			}			
+			}
 			addTrait(MediaTraitType.PLAY, playTrait);
 
 			// setup seek trait
@@ -129,11 +129,11 @@ package org.osmf.net
 	  			if (isNaN(timeTrait.duration) || timeTrait.duration == 0)
 	  			{
 	  				timeTrait.addEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
-	  				
+
 	  				function onDurationChange(event:TimeEvent):void
 	  				{
 	  					timeTrait.removeEventListener(TimeEvent.DURATION_CHANGE, onDurationChange);
-	  					
+
 	  					addTrait(MediaTraitType.SEEK, seekTrait);
 	  				}
 	  			}
@@ -142,7 +142,7 @@ package org.osmf.net
 	    			addTrait(MediaTraitType.SEEK, seekTrait);
 	    		}
 	    	}
-	    	
+
 			// setup dynamic resource trait
 			var dsResource:DynamicStreamingResource = resource as DynamicStreamingResource;
 			if (dsResource != null && loadTrait.switchManager != null)
@@ -154,7 +154,7 @@ package org.osmf.net
 				}
 				addTrait(MediaTraitType.DYNAMIC_STREAM, dsTrait);
 			}
-			
+
 			//setup alternative audio trait
 			var sResource:StreamingURLResource = resource as StreamingURLResource;
 			if (sResource != null && sResource.alternativeAudioStreamItems != null && sResource.alternativeAudioStreamItems.length > 0)
