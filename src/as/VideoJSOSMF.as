@@ -44,6 +44,7 @@ import org.osmf.net.NetClient;
 
 import com.mediaplatform.util.*;
 import org.osmf.net.MulticastResource;
+import flash.events.NetStatusEvent;
 
 CONFIG::DASH
 import com.castlabs.dash.DashPluginInfo;
@@ -554,6 +555,7 @@ public class VideoJSOSMF extends Sprite {
               if(netStream)
               {
                 netStream.addEventListener(HTTPStreamingEvent.DOWNLOAD_COMPLETE, onDownloadComplete);
+                netStream.addEventListener(NetStatusEvent.NET_STATUS, handleNetStatus)
               }
 
               NetClient(loadTrait.netStream.client).addHandler("ScriptCommand", handleScriptCommand);
@@ -561,6 +563,10 @@ public class VideoJSOSMF extends Sprite {
             }
             break;
       }
+  }
+  private function handleNetStatus(evt:NetStatusEvent):void
+  {
+    Console.log(evt.info.code);
   }
 
   /* External API Methods */
