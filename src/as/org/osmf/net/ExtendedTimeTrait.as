@@ -3,7 +3,7 @@ package org.osmf.net
 	import flash.events.Event;
 	import flash.events.NetStatusEvent;
 	import flash.net.NetStream;
-	
+
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.URLResource;
 	import org.osmf.net.MulticastResource;
@@ -19,13 +19,13 @@ package org.osmf.net
 		public function ExtendedTimeTrait(netStream:NetStream, resource:MediaResourceBase, defaultDuration:Number=NaN)
 		{
 			super();
-			
-			this.netStream = netStream;			
+
+			this.netStream = netStream;
 			//NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus, false, 0, true);
 			this.resource = resource;
-			
+
 			if (isNaN(defaultDuration) == false)
 			{
 				setDuration(defaultDuration);
@@ -35,10 +35,10 @@ package org.osmf.net
 			{
 				multicast = true;
 				//setDuration(Number.MIN_VALUE);
-				setDuration(NaN);
-			}	
+				setDuration(Infinity);
+			}
 		}
-		//override protected function 
+		//override protected function
 		/**
 		 * @private
 		 */
@@ -48,10 +48,10 @@ package org.osmf.net
 			{
 				//return 0;
 			}
-			
-			// If at the end of the video, make sure the duration matches the currentTime.  
+
+			// If at the end of the video, make sure the duration matches the currentTime.
 			// Work around for FP-3724.  Only apply duration offset at the end - or else the seek(0) doesn't goto 0.
-			if (durationOffset == (duration - (netStream.time - _audioDelay)))  
+			if (durationOffset == (duration - (netStream.time - _audioDelay)))
 			{
 				return netStream.time - _audioDelay + durationOffset;
 			}
@@ -69,7 +69,7 @@ package org.osmf.net
 					// For progressive,	NetStream.Play.Stop means playback
 					// has completed.  But this isn't fired for streaming.
 					if (NetStreamUtils.isStreamingResource(resource) == false)
-					{						
+					{
 						signalComplete();
 					}
 					break;
@@ -82,7 +82,7 @@ package org.osmf.net
 			}
 		}
 		private function onPlayStatus(event:Object):void
-		{			
+		{
 			switch(event.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_COMPLETE:
@@ -93,7 +93,7 @@ package org.osmf.net
 			}
 		}
 		/**
-		 * We have to change the duration , given that audioDelay isn't enough to 
+		 * We have to change the duration , given that audioDelay isn't enough to
 		 * fix that netStream.time has from the detected duration.  This isn't
 		 * pre computable, since PLAY_STOP is fired at
 		 * non-deterministic intervals when the video is near ending.
@@ -106,7 +106,7 @@ package org.osmf.net
 			}
 			super.signalComplete();
 		}
-		
+
 		//private var _metadataCount:int = 0;
 		private var _audioDelay:Number = 0;
 		private var multicast:Boolean = false;
