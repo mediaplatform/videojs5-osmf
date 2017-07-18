@@ -18,6 +18,7 @@ package org.osmf.net
 
 		public function ExtendedTimeTrait(netStream:NetStream, resource:MediaResourceBase, defaultDuration:Number=NaN)
 		{
+			Console.log('ExtendedTimeTrait constructor');
 			super();
 
 			this.netStream = netStream;

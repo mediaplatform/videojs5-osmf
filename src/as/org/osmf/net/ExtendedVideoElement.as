@@ -26,6 +26,7 @@ package org.osmf.net
 
 		public function ExtendedVideoElement(resource:MediaResourceBase=null, loader:NetLoader=null)
 		{
+			Console.log('ExtendedVideoElement constructor');
 			super(null, null);
 			super.loader = loader;
 			this.resource = resource;

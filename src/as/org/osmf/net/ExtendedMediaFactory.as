@@ -8,16 +8,19 @@ package org.osmf.net
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.ExtendedVideoElement;
 
+	import com.videojs.utils.Console;
+
 	public class ExtendedMediaFactory extends DefaultMediaFactory
 	{
 		private var netLoader:NetLoader;
-		private var multicastNetLoader:MulticastNetLoader;
+		private var _multicastNetLoader:MulticastNetLoader;
 
 		public function ExtendedMediaFactory()
 		{
+			Console.log('ExtendedMediaFactory constructor');
 			super();
 
-			//addEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, handleMediaElementCreation, false, 0, true);
+			addEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, handleMediaElementCreation, false, 0, true);
 
 			netLoader = new NetLoader();
 			addItem
@@ -31,17 +34,21 @@ package org.osmf.net
 				)
 			);
 
-			multicastNetLoader = new MulticastNetLoader();
+			_multicastNetLoader = new MulticastNetLoader();
 			addItem
 			( new MediaFactoryItem
-				( "com.mediaplayer.mediaplatform.elements.video"
-					, multicastNetLoader.canHandleResource
+				( "com.mediaplayer.mediaplatform.elements.multicast.video"
+					, _multicastNetLoader.canHandleResource
 					, function():MediaElement
 					{
-						return new ExtendedVideoElement(null, multicastNetLoader);
+						return new ExtendedVideoElement(null, _multicastNetLoader);
 					}
 				)
 			);
+
+		}
+		private function handleMediaElementCreation(evt:Event):void
+		{
 
 		}
 	}
