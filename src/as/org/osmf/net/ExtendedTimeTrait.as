@@ -13,6 +13,8 @@ package org.osmf.net
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.traits.TimeTrait;
 
+	import com.videojs.utils.Console;
+	
 	public class ExtendedTimeTrait extends TimeTrait
 	{
 

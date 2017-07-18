@@ -7,6 +7,7 @@ package org.osmf.net
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.ExtendedVideoElement;
+	import org.osmf.events.MediaFactoryEvent;
 
 	import com.videojs.utils.Console;
 
@@ -47,7 +48,7 @@ package org.osmf.net
 			);
 
 		}
-		private function handleMediaElementCreation(evt:Event):void
+		private function handleMediaElementCreation(evt:MediaFactoryEvent):void
 		{
 
 		}

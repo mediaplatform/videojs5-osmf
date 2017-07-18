@@ -315,8 +315,9 @@ public class VideoJSOSMF extends Sprite {
   }
 
   private function createMediaFactory():void {
-    Console.log('Create MediaFactory');
-    _mediaFactory = new DefaultMediaFactory();
+
+    _mediaFactory = new ExtendedMediaFactory();
+    Console.log('Create MediaFactory: ' + _mediaFactory);
     _mediaFactory.addEventListener(MediaFactoryEvent.MEDIA_ELEMENT_CREATE, onMediaFactoryEvent);
     _mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD, onMediaFactoryEvent);
     _mediaFactory.addEventListener(MediaFactoryEvent.PLUGIN_LOAD_ERROR, onMediaFactoryEvent);

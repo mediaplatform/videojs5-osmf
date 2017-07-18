@@ -16,7 +16,9 @@ package org.osmf.net
 	import org.osmf.utils.OSMFSettings;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.net.NetStreamAlternativeAudioTrait;
-	import org.osmf.traits.*
+	import org.osmf.traits.*;
+
+	import com.videojs.utils.Console;
 
 	public class ExtendedVideoElement extends LightweightVideoElement
 	{
