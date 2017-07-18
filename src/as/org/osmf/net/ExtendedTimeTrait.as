@@ -14,7 +14,7 @@ package org.osmf.net
 	import org.osmf.traits.TimeTrait;
 
 	import com.videojs.utils.Console;
-	
+
 	public class ExtendedTimeTrait extends TimeTrait
 	{
 
@@ -34,6 +34,8 @@ package org.osmf.net
 				setDuration(defaultDuration);
 			}
 			var streamResource:MulticastResource = resource as MulticastResource;
+			Console.log("streamResource - " + streamResource);
+			Console.log("streamResource.groupspec - " + streamResource.groupspec);
 			if (streamResource != null && streamResource.groupspec != null && streamResource.groupspec.length > 0)
 			{
 				multicast = true;
