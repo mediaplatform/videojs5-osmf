@@ -428,7 +428,7 @@ public class VideoJSOSMF extends Sprite {
   }
 
   private function onLoadEvent(event:LoadEvent):void {
-    Console.log('onLoadEvent', event.toString());
+    Console.log('onLoadEvent', event.loadState.toString());
     switch(event.type) {
       case LoadEvent.LOAD_STATE_CHANGE:
         dispatchExternalEvent(event.loadState);
