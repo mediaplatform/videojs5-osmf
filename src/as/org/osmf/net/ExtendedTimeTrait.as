@@ -67,7 +67,7 @@ package org.osmf.net
 		}
 		private function onNetStatus(event:NetStatusEvent):void
 		{
-			//trace("code is " + event.info.code);
+			Console.log("[ExtendedTimeTrait.onNetStatus] code is " + event.info.code);
 			switch (event.info.code)
 			{
 				case NetStreamCodes.NETSTREAM_PLAY_STOP:
