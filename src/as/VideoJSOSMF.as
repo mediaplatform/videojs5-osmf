@@ -521,8 +521,10 @@ public class VideoJSOSMF extends Sprite {
           }
           break;
 	      case MediaTraitType.LOAD:
-              var loadTrait:NetStreamLoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
-	          loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+          var loadTrait:NetStreamLoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+	        loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
+          Console.log(loadTrait.netStream);
+          Console.log(loadTrait.connection);
 	      break;
           case MediaTraitType.BUFFER:
               if (this.initialBufferTime && this.initialBufferTime > 0) {
@@ -544,7 +546,7 @@ public class VideoJSOSMF extends Sprite {
   {
       switch (event.loadState) {
           case LoadState.LOADING:
-            Console.log("LOOOOOOOOOOOOOOOOOOOOOOAAAAAAAAAAAAAAAAAAAAAAAADING");
+
             break;
           case LoadState.READY:
             //var loadTrait:NetStreamLoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
@@ -555,9 +557,10 @@ public class VideoJSOSMF extends Sprite {
               var netStream:NetStream = loadTrait.netStream;
               if(netStream)
               {
+                Console.log("Adding NetStatusEvent Listeners");
                 netStream.addEventListener(HTTPStreamingEvent.DOWNLOAD_COMPLETE, onDownloadComplete);
-                //netStream.addEventListener(NetStatusEvent.NET_STATUS, handleNetStatus);
-                //loadTrait.connection.addEventListener(NetStatusEvent.NET_STATUS, handleNetStatus);
+                netStream.addEventListener(NetStatusEvent.NET_STATUS, handleNetStatus);
+                loadTrait.connection.addEventListener(NetStatusEvent.NET_STATUS, handleNetStatus);
               }
 
               NetClient(loadTrait.netStream.client).addHandler("ScriptCommand", handleScriptCommand);
