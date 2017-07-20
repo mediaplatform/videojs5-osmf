@@ -39,6 +39,7 @@ package org.osmf.net
 			var mcFactory:NetConnectionFactory = new NetConnectionFactory();
 			mcFactory.timeout = 6000;
 			_multicastNetLoader = new MulticastNetLoader(mcFactory);
+			addItem
 			( new MediaFactoryItem
 				( "com.mediaplayer.mediaplatform.elements.multicast.video"
 					, _multicastNetLoader.canHandleResource
