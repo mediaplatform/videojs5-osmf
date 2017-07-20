@@ -33,15 +33,20 @@ package org.osmf.net
 			{
 				setDuration(defaultDuration);
 			}
+			
 			var multicastResource:MulticastResource = resource as MulticastResource;
-			Console.log("multicastResource - " + multicastResource);
-			Console.log("multicastResource.groupspec - " + multicastResource.groupspec);
-			if (multicastResource != null && multicastResource.groupspec != null && multicastResource.groupspec.length > 0)
+			if (multicastResource != null)
 			{
-				multicast = true;
-				//setDuration(Number.MIN_VALUE);
-				setDuration(Infinity);
+				if(multicastResource.groupspec != null && multicastResource.groupspec.length > 0)
+				{
+					Console.log("multicastResource - " + multicastResource);
+					Console.log("multicastResource.groupspec - " + multicastResource.groupspec);
+					multicast = true;
+					//setDuration(Number.MIN_VALUE);
+					setDuration(Infinity);
+				}
 			}
+
 			var streamingResource:StreamingURLResource = resource as StreamingURLResource;
 			if(streamingResource !== null)
 			{
