@@ -37,7 +37,7 @@ package org.osmf.net
 			);
 
 			var mcFactory:NetConnectionFactory = new NetConnectionFactory();
-			mcFactory.timeout = 6000;
+			mcFactory.timeout = 5000;
 			_multicastNetLoader = new MulticastNetLoader(mcFactory);
 			addItem
 			( new MediaFactoryItem
