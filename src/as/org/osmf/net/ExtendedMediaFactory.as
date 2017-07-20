@@ -7,6 +7,7 @@ package org.osmf.net
 	import org.osmf.media.MediaFactoryItem;
 	import org.osmf.media.MediaElement;
 	import org.osmf.net.ExtendedVideoElement;
+	import org.osmf.net.NetConnectionFactory;
 	import org.osmf.events.MediaFactoryEvent;
 
 	import com.videojs.utils.Console;
@@ -35,8 +36,9 @@ package org.osmf.net
 				)
 			);
 
-			_multicastNetLoader = new MulticastNetLoader();
-			addItem
+			var mcFactory:NetConnectionFactory = new NetConnectionFactory();
+			mcFactory.timeout = 6000;
+			_multicastNetLoader = new MulticastNetLoader(mcFactory);
 			( new MediaFactoryItem
 				( "com.mediaplayer.mediaplatform.elements.multicast.video"
 					, _multicastNetLoader.canHandleResource
