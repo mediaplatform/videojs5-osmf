@@ -42,6 +42,10 @@ package org.osmf.net
 				//setDuration(Number.MIN_VALUE);
 				setDuration(Infinity);
 			}
+			if(resource.streamType === "live")
+			{
+				setDuration(Infinity);
+			}
 		}
 		//override protected function
 		/**
