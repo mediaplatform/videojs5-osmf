@@ -77,7 +77,6 @@ public class VideoJSOSMF extends Sprite {
   private var _mediaFactory:MediaFactory;
   private var _resource:StreamingURLResource;
   private var _readyState:Number = 0;
-  private var _firstPlay:Boolean = true;
 
   private var _initialBufferTime:Number;
   public function set initialBufferTime(sec:Number):void {
@@ -158,7 +157,7 @@ public class VideoJSOSMF extends Sprite {
     if (loaderInfo.parameters['autoplay'] == "true") {
         Console.log('ready() loaderInfo.parameters[\'autoplay\']: ' + loaderInfo.parameters['autoplay']);
         _mediaPlayer.autoPlay = true;
-        //onPlayCalled();
+        onPlayCalled();
     }
   }
 
@@ -171,8 +170,8 @@ public class VideoJSOSMF extends Sprite {
     _mediaPlayer.currentTimeUpdateInterval = 250;
     _mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onAudioEvent);
     _mediaPlayer.addEventListener(AudioEvent.VOLUME_CHANGE, onAudioEvent);
-    //_mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferEvent);
-    //_mediaPlayer.addEventListener(BufferEvent.BUFFERING_CHANGE, onBufferEvent);
+    _mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferEvent);
+    _mediaPlayer.addEventListener(BufferEvent.BUFFERING_CHANGE, onBufferEvent);
     _mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onMediaPlayerStateChangeEvent);
     _mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE, onMediaPlayerCapabilityChangeEvent);
     _mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE, onMediaPlayerCapabilityChangeEvent);
@@ -193,8 +192,8 @@ public class VideoJSOSMF extends Sprite {
     _mediaPlayer.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadEvent);
     _mediaPlayer.addEventListener(DisplayObjectEvent.DISPLAY_OBJECT_CHANGE, onDisplayObjectEvent);
     _mediaPlayer.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onDisplayObjectEvent);
-    //_mediaPlayer.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayEvent);
-    //_mediaPlayer.addEventListener(PlayEvent.CAN_PAUSE_CHANGE, onPlayEvent);
+    _mediaPlayer.addEventListener(PlayEvent.PLAY_STATE_CHANGE, onPlayEvent);
+    _mediaPlayer.addEventListener(PlayEvent.CAN_PAUSE_CHANGE, onPlayEvent);
     _mediaPlayer.addEventListener(DynamicStreamEvent.AUTO_SWITCH_CHANGE, onDynamicStreamEvent);
     _mediaPlayer.addEventListener(DynamicStreamEvent.NUM_DYNAMIC_STREAMS_CHANGE, onDynamicStreamEvent);
     _mediaPlayer.addEventListener(DynamicStreamEvent.SWITCHING_CHANGE, onDynamicStreamEvent);
@@ -367,23 +366,16 @@ public class VideoJSOSMF extends Sprite {
     switch (event.state) {
       case MediaPlayerState.READY:
           _readyState = 4;
-          dispatchExternalEvent('ready');
           if (_mediaPlayer.autoPlay) {
               onPlayCalled();
           }
-          //dispatchExternalEvent('canplay');
+          dispatchExternalEvent('canplay');
         break;
       case MediaPlayerState.PLAYING:
-        if(_firstPlay)
-        {
-          dispatchExternalEvent('play');
-        }
-        dispatchExternalEvent(event.state);
-        break;
       case MediaPlayerState.PAUSED:
-        dispatchExternalEvent(event.state);
-        //dispatchExternalEvent('canplay');
-        break;
+            dispatchExternalEvent(event.state);
+            dispatchExternalEvent('canplay');
+          break;
       case MediaPlayerState.BUFFERING:
             dispatchExternalEvent('waiting');
             break;
@@ -401,7 +393,6 @@ public class VideoJSOSMF extends Sprite {
 
   private function onMediaPlayerCapabilityChangeEvent(event:MediaPlayerCapabilityChangeEvent):void {
     Console.log('onMediaPlayerCapabilityChangeEvent', event.toString());
-    
   }
 
   private function onSeekEvent(event:SeekEvent):void {
@@ -789,8 +780,8 @@ public class VideoJSOSMF extends Sprite {
     Console.log('Play called on OSMF');
     if (_mediaPlayer.canPlay){
       _mediaPlayer.play();
-      //Console.log('Dispatch event');
-      //dispatchExternalEvent('play');
+      Console.log('Dispatch event');
+      dispatchExternalEvent('play');
     } else {
       Console.log('Can\'t play!');
     }
