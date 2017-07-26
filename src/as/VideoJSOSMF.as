@@ -171,8 +171,8 @@ public class VideoJSOSMF extends Sprite {
     _mediaPlayer.currentTimeUpdateInterval = 250;
     _mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onAudioEvent);
     _mediaPlayer.addEventListener(AudioEvent.VOLUME_CHANGE, onAudioEvent);
-    _mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferEvent);
-    _mediaPlayer.addEventListener(BufferEvent.BUFFERING_CHANGE, onBufferEvent);
+    //_mediaPlayer.addEventListener(BufferEvent.BUFFER_TIME_CHANGE, onBufferEvent);
+    //_mediaPlayer.addEventListener(BufferEvent.BUFFERING_CHANGE, onBufferEvent);
     _mediaPlayer.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onMediaPlayerStateChangeEvent);
     _mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_BUFFER_CHANGE, onMediaPlayerCapabilityChangeEvent);
     _mediaPlayer.addEventListener(MediaPlayerCapabilityChangeEvent.CAN_LOAD_CHANGE, onMediaPlayerCapabilityChangeEvent);
@@ -401,6 +401,7 @@ public class VideoJSOSMF extends Sprite {
 
   private function onMediaPlayerCapabilityChangeEvent(event:MediaPlayerCapabilityChangeEvent):void {
     Console.log('onMediaPlayerCapabilityChangeEvent', event.toString());
+    
   }
 
   private function onSeekEvent(event:SeekEvent):void {
