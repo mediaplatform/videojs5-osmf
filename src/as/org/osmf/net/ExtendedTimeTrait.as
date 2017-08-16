@@ -24,7 +24,7 @@ package org.osmf.net
 			super();
 
 			this.netStream = netStream;
-			//NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
+
 			NetClient(netStream.client).addHandler(NetStreamCodes.ON_PLAY_STATUS, onPlayStatus);
 			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus, false, 0, true);
 			this.resource = resource;
@@ -33,7 +33,7 @@ package org.osmf.net
 			{
 				setDuration(defaultDuration);
 			}
-			
+
 			var multicastResource:MulticastResource = resource as MulticastResource;
 			if (multicastResource != null)
 			{
@@ -53,6 +53,10 @@ package org.osmf.net
 				if(streamingResource.streamType === "live")
 				{
 					setDuration(Infinity);
+				}
+				else
+				{
+					NetClient(netStream.client).addHandler(NetStreamCodes.ON_META_DATA, onMetaData);
 				}
 			}
 		}
@@ -77,6 +81,32 @@ package org.osmf.net
 			{
 				return netStream.time - _audioDelay;
 			}
+		}
+		private function onMetaData(value:Object):void
+		{
+			// Determine the start time and duration for the
+			// resource.
+			var playArgs:Object = NetStreamUtils.getPlayArgsForResource(resource);
+
+			//Audio delay is sometime	s passed along with the metadata.  The audio delay affects
+			//all netsTream.time related calculations, including seek().
+			_audioDelay = value.hasOwnProperty("audiodelay") ? value.audiodelay : 0;
+
+			// Ensure our start time is non-negative, we only use it for
+			// calculating the offset.
+			var subclipStartTime:Number = Math.max(0, playArgs.start);
+
+			// Ensure our duration is non-negative.
+			var subclipDuration:Number = playArgs.len;
+			if (subclipDuration == NetStreamUtils.PLAY_LEN_ARG_ALL)
+			{
+				subclipDuration = Number.MAX_VALUE;
+			}
+
+			// If startTime is unspecified, our duration is everything
+			// up to the end of the subclip (or the entire duration, if
+			// no subclip end is specified).  Take into account audio delay.
+			setDuration(Math.min((value.duration - _audioDelay) - subclipStartTime, subclipDuration));
 		}
 		private function onNetStatus(event:NetStatusEvent):void
 		{
