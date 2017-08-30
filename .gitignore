@@ -19,5 +19,5 @@ src/js/video.js
 # information for Eclipse / Flash Builder.
 
 
-/dist
-/target
+dist
+target
