@@ -8,7 +8,7 @@
 	<name>videojs5-osmf</name>
 	<build>
 		<sourceDirectory>src/as</sourceDirectory>
-		<finalName>videojs-osmf</finalName>
+		<finalName>videojs5-osmf</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.sonatype.flexmojos</groupId>
