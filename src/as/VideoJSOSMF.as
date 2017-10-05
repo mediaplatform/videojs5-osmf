@@ -87,7 +87,7 @@ public class VideoJSOSMF extends Sprite {
   }
 
   public function VideoJSOSMF() {
-    initializeContextMenu();
+    //initializeContextMenu();
     initializeStage();
     initializeSecurity();
     registerExternalMethods();
