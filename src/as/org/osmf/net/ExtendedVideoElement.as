@@ -17,6 +17,8 @@ package org.osmf.net
 	import org.osmf.events.TimeEvent;
 	import org.osmf.net.NetStreamAlternativeAudioTrait;
 	import org.osmf.traits.*;
+	import org.osmf.net.NetClient;
+	import flash.external.ExternalInterface;
 
 	import com.videojs.utils.Console;
 
@@ -45,18 +47,35 @@ package org.osmf.net
 
 			_videoSurface.attachNetStream(_stream);
 
-			//_stream.addEventListener(AsyncErrorEvent.ASYNC_ERROR, handleAsyncError)
-			//_stream.addEventListener(IOErrorEvent.IO_ERROR, handleIOError);
-			//_stream.addEventListener(NetStatusEvent.NET_STATUS, onNetStatusEvent, false, 0, true);
+			Console.log('About to add client handlers');
+			NetClient(_stream.client).addHandler("KillStream", handleKillStream);
+			NetClient(_stream.client).addHandler("ScriptCommand", handleScriptCommand);
+			NetClient(_stream.client).addHandler('OverlayCommand', handleOverlayCommand);
 
-			//function handleAsyncError(evt:AsyncErrorEvent):void
-			//{
-			//	trace(evt.text);
-			//}
-			//function handleIOError(evt:IOErrorEvent):void
-			//{
-			//	trace(evt.text);
-			//}
+			function handleScriptCommand(cmd:String):void
+			{
+
+				if(ExternalInterface.available)
+				{
+					//Console.log('ScriptCommand', cmd.toString());
+					//ExternalInterface.call("videojs.Osmf.Flash_ScriptCommand", cmd.toString());
+					//ExternalInterface.call("videojs.Osmf.VIDEO_ScriptCommand", cmd.toString());
+					ExternalInterface.call("videojs.Osmf.NS_ScriptCommand", cmd.toString());
+				}
+			}
+			function handleKillStream(cmd:String):void
+			{
+				_stream.close();
+			}
+			function handleOverlayCommand(cmd:String):void
+			{
+
+				if(ExternalInterface.available)
+				{
+					//Console.log('ScriptCommand', cmd.toString());
+					ExternalInterface.call("videojs.Osmf.NS_OverlayCommand", cmd);
+				}
+			}
 			finishLoad();
 		}
 

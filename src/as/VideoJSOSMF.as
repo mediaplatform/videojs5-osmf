@@ -87,7 +87,6 @@ public class VideoJSOSMF extends Sprite {
   }
 
   public function VideoJSOSMF() {
-    Console.log("Parisi number 2!");
     //initializeContextMenu();
     initializeStage();
     initializeSecurity();
@@ -381,7 +380,7 @@ public class VideoJSOSMF extends Sprite {
             dispatchExternalEvent('waiting');
             break;
       case MediaPlayerState.PLAYBACK_ERROR:
-            dispatchExternalErrorEvent(event.state, 'error2');
+            dispatchExternalErrorEvent(event.state, 'error');
             break;
       case MediaPlayerState.LOADING:
             dispatchExternalEvent('loadstart');
@@ -438,7 +437,7 @@ public class VideoJSOSMF extends Sprite {
   }
   private function handleScriptCommand(cmd:Object):void
   {
-    Console.log('ScriptCommand', cmd.toString());
+    //Console.log('ScriptCommand', cmd.toString());
     if(ExternalInterface.available)
     {
       //ExternalInterface.call("videojs.Osmf.Flash_ScriptCommand", cmd.toString());
@@ -448,7 +447,7 @@ public class VideoJSOSMF extends Sprite {
   }
   private function handleOverlay(cmd:Object):void
   {
-    Console.log('OverlayCommand', cmd.toString());
+    //Console.log('OverlayCommand', cmd.toString());
     if(ExternalInterface.available)
     {
       ExternalInterface.call("videojs.Osmf.NS_OverlayCommand", cmd);
@@ -586,7 +585,6 @@ public class VideoJSOSMF extends Sprite {
      6. Create Element
      */
     //dispose();
-
     createResource(src);
     createMediaFactory();
     createLayoutMetadata();
@@ -700,7 +698,7 @@ public class VideoJSOSMF extends Sprite {
             return netStream.decodedFrames;
 
       default:
-        Console.log('Get Prop Called: Not Found', pPropertyName);
+        //Console.log('Get Prop Called: Not Found', pPropertyName);
         break;
     }
   }
