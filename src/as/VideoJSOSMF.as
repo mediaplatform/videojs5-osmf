@@ -87,6 +87,7 @@ public class VideoJSOSMF extends Sprite {
   }
 
   public function VideoJSOSMF() {
+    Console.log("Parisi!");
     //initializeContextMenu();
     initializeStage();
     initializeSecurity();
@@ -585,7 +586,7 @@ public class VideoJSOSMF extends Sprite {
      6. Create Element
      */
     //dispose();
-    Console.log("Parisi!");
+
     createResource(src);
     createMediaFactory();
     createLayoutMetadata();
