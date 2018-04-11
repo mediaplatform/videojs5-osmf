@@ -87,7 +87,7 @@ public class VideoJSOSMF extends Sprite {
   }
 
   public function VideoJSOSMF() {
-    Console.log("Parisi!");
+    Console.log("Parisi number 2!");
     //initializeContextMenu();
     initializeStage();
     initializeSecurity();
@@ -381,7 +381,7 @@ public class VideoJSOSMF extends Sprite {
             dispatchExternalEvent('waiting');
             break;
       case MediaPlayerState.PLAYBACK_ERROR:
-            dispatchExternalErrorEvent(event.state, 'error');
+            dispatchExternalErrorEvent(event.state, 'error2');
             break;
       case MediaPlayerState.LOADING:
             dispatchExternalEvent('loadstart');
