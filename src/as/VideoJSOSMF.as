@@ -585,6 +585,7 @@ public class VideoJSOSMF extends Sprite {
      6. Create Element
      */
     //dispose();
+    Console.log("Parisi!");
     createResource(src);
     createMediaFactory();
     createLayoutMetadata();
