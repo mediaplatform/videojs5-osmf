@@ -47,7 +47,8 @@ package org.osmf.net
 
 			_videoSurface.attachNetStream(_stream);
 
-			Console.log('About to add client handlers');
+			//Adding the following for WC-5265 - mparisi
+			//Console.log('About to add client handlers');
 			NetClient(_stream.client).addHandler("KillStream", handleKillStream);
 			NetClient(_stream.client).addHandler("ScriptCommand", handleScriptCommand);
 			NetClient(_stream.client).addHandler('OverlayCommand', handleOverlayCommand);
