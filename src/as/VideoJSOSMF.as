@@ -79,11 +79,28 @@ public class VideoJSOSMF extends Sprite {
   private var _readyState:Number = 0;
 
   private var _initialBufferTime:Number;
+  private var _clipStartTime:Number = NaN;
+  private var _clipEndTime:Number = NaN;
+
   public function set initialBufferTime(sec:Number):void {
     this._initialBufferTime = sec;
   }
   public function get initialBufferTime():Number {
     return this._initialBufferTime;
+  }
+
+  public function set clipStartTime(sec:Number):void {
+    this._clipStartTime = sec;
+  }
+  public function get clipStartTime():Number {
+    return this._clipStartTime;
+  }
+
+  public function set clipEndTime(sec:Number):void {
+    this._clipEndTime = sec;
+  }
+  public function get clipEndTime():Number {
+    return this._clipEndTime;
   }
 
   public function VideoJSOSMF() {
@@ -275,7 +292,8 @@ public class VideoJSOSMF extends Sprite {
     var vo:Object = {};
 
     Console.log('Create Resource with url: ' + newURL);
-
+    Console.log('clipStartTime: ' + this.clipStartTime);
+    Console.log('clipEndTime: ' + this.clipEndTime);
 		//var clipStartTime:Number = NaN;
 		//var clipEndTime:Number = NaN;
 
@@ -309,8 +327,8 @@ public class VideoJSOSMF extends Sprite {
 			{
         //We will need to add in/out points here in the future - mparisi
 				//url = NetUtils.parseProtocol(url, _playerVO);
-				//resource = new StreamingURLResource(LegacySupportUtil.checkRules(url), null, clipStartTime, clipEndTime);
-        _resource = new StreamingURLResource(url, StreamType.LIVE_OR_RECORDED);
+				//_resource = new StreamingURLResource(LegacySupportUtil.checkRules(url), null, clipStartTime, clipEndTime);
+        _resource = new StreamingURLResource(url, StreamType.LIVE_OR_RECORDED, clipStartTime, clipEndTime);
 			}
 
   }
