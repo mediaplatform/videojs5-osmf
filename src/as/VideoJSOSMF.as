@@ -384,7 +384,7 @@ public class VideoJSOSMF extends Sprite {
     switch (event.state) {
       case MediaPlayerState.READY:
           _readyState = 4;
-          if (_mediaPlayer.autoPlay) {
+          if (_mediaPlayer.autoRewind) {
               onPlayCalled();
           }
           dispatchExternalEvent('canplay');

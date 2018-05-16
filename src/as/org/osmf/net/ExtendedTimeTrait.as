@@ -124,8 +124,8 @@ package org.osmf.net
 				case NetStreamCodes.NETSTREAM_PLAY_UNPUBLISH_NOTIFY:
 					// When a live stream is unpublished, we should signal that
 					// the stream has stopped.
-					//signalComplete();
-					dispatchEvent(new Event("video.complete", true));
+					signalComplete();
+					//dispatchEvent(new Event("video.complete", true));
 					break;
 			}
 		}
@@ -136,8 +136,8 @@ package org.osmf.net
 				case NetStreamCodes.NETSTREAM_PLAY_COMPLETE:
 					// For streaming, NetStream.Play.Complete means playback
 					// has completed.  But this isn't fired for progressive. We can't use signalComplete, we need to bypass OSMF here.
-					//signalComplete();
-					dispatchEvent(new Event("video.complete", true));
+					signalComplete();
+					//dispatchEvent(new Event("video.complete", true));
 			}
 		}
 		/**

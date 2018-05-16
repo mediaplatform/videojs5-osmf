@@ -112,7 +112,7 @@ package org.osmf.net
 			var timeTrait:TimeTrait = loadTrait.getTrait(MediaTraitType.TIME) as TimeTrait;
 			if (timeTrait == null)
 			{
-				//timeTrait = new NetStreamTimeTrait(stream, loadTrait.resource, defaultDuration);
+				//timeTrait = new NetStreamTimeTrait(_stream, loadTrait.resource, defaultDuration);
 				timeTrait = new ExtendedTimeTrait(_stream, loadTrait.resource, defaultDuration);
 			}
 			addTrait(MediaTraitType.TIME, timeTrait);
