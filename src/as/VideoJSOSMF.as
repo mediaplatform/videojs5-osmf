@@ -182,7 +182,7 @@ public class VideoJSOSMF extends Sprite {
     Console.log('Create MediaPlayer');
     _mediaPlayer = new MediaPlayer();
     _mediaPlayer.autoPlay = false;
-    _mediaPlayer.autoRewind = false;
+    _mediaPlayer.autoRewind = true;
     _mediaPlayer.loop = false;
     _mediaPlayer.currentTimeUpdateInterval = 250;
     _mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onAudioEvent);
@@ -384,9 +384,6 @@ public class VideoJSOSMF extends Sprite {
     switch (event.state) {
       case MediaPlayerState.READY:
           _readyState = 4;
-          if (_mediaPlayer.autoRewind) {
-              onPlayCalled();
-          }
           dispatchExternalEvent('canplay');
         break;
       case MediaPlayerState.PLAYING:
