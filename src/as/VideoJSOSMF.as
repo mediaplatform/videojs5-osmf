@@ -182,7 +182,7 @@ public class VideoJSOSMF extends Sprite {
     Console.log('Create MediaPlayer');
     _mediaPlayer = new MediaPlayer();
     _mediaPlayer.autoPlay = false;
-    _mediaPlayer.autoRewind = true;
+    _mediaPlayer.autoRewind = false;
     _mediaPlayer.loop = false;
     _mediaPlayer.currentTimeUpdateInterval = 250;
     _mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onAudioEvent);
@@ -391,8 +391,16 @@ public class VideoJSOSMF extends Sprite {
             dispatchExternalEvent(event.state);
             dispatchExternalEvent('canplay');
           break;
-      case MediaPlayerState.BUFFERING:
-            dispatchExternalEvent('waiting');
+        case MediaPlayerState.BUFFERING:
+          /*
+            Buffering event is dispatched despite that the video
+            has already reached the end.  Only want to dispatch a
+            `waiting` event if the video hasn't ended and is truly
+            buffering for more content.
+           */
+            if (_mediaPlayer.duration !== _mediaPlayer.currentTime) {
+                dispatchExternalEvent('waiting');
+            }
             break;
       case MediaPlayerState.PLAYBACK_ERROR:
             dispatchExternalErrorEvent(event.state, 'error');
@@ -422,7 +430,13 @@ public class VideoJSOSMF extends Sprite {
   private function onTimeEvent(event:TimeEvent):void {
     switch(event.type) {
       case TimeEvent.COMPLETE:
-        dispatchExternalEvent('ended');
+          Console.log('TimeEvent.COMPLETE ' + _mediaPlayer.duration + ' ' + ' ' + _mediaPlayer.currentTime);
+          /*
+            Dispatch one last `timeupdate` event before and `ended` event
+            to ensure the progress bar reaches the end (UI)
+           */
+          dispatchExternalEvent('timeupdate');
+          dispatchExternalEvent('ended');
         break;
 
         case TimeEvent.CURRENT_TIME_CHANGE:
@@ -470,11 +484,14 @@ public class VideoJSOSMF extends Sprite {
   }
 
   private function onPlayEvent(event:PlayEvent):void {
-    Console.log('onPlayEvent', event.toString());
+    Console.log('onPlayEvent', event.toString() + "play state = " + event.playState);
     switch(event.type) {
       case PlayEvent.PLAY_STATE_CHANGE:
-          dispatchExternalEvent('play');
-          dispatchExternalEvent(event.playState);
+          if (event.playState == 'playing') {
+              dispatchExternalEvent('play')
+          }
+          else if (event.playState == 'stopped')
+              dispatchExternalEvent('pause');
         break;
     }
   }
@@ -586,7 +603,7 @@ public class VideoJSOSMF extends Sprite {
   }
   private function handleNetStatus(evt:NetStatusEvent):void
   {
-    Console.log(evt.info.code);
+      Console.log(evt.info.code);
   }
 
   /* External API Methods */
