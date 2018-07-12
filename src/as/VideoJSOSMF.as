@@ -79,11 +79,28 @@ public class VideoJSOSMF extends Sprite {
   private var _readyState:Number = 0;
 
   private var _initialBufferTime:Number;
+  private var _clipStartTime:Number = NaN;
+  private var _clipEndTime:Number = NaN;
+
   public function set initialBufferTime(sec:Number):void {
     this._initialBufferTime = sec;
   }
   public function get initialBufferTime():Number {
     return this._initialBufferTime;
+  }
+
+  public function set clipStartTime(sec:Number):void {
+    this._clipStartTime = sec;
+  }
+  public function get clipStartTime():Number {
+    return this._clipStartTime;
+  }
+
+  public function set clipEndTime(sec:Number):void {
+    this._clipEndTime = sec;
+  }
+  public function get clipEndTime():Number {
+    return this._clipEndTime;
   }
 
   public function VideoJSOSMF() {
@@ -165,7 +182,7 @@ public class VideoJSOSMF extends Sprite {
     Console.log('Create MediaPlayer');
     _mediaPlayer = new MediaPlayer();
     _mediaPlayer.autoPlay = false;
-    _mediaPlayer.autoRewind = false;
+    _mediaPlayer.autoRewind = true;
     _mediaPlayer.loop = false;
     _mediaPlayer.currentTimeUpdateInterval = 250;
     _mediaPlayer.addEventListener(AudioEvent.MUTED_CHANGE, onAudioEvent);
@@ -275,7 +292,8 @@ public class VideoJSOSMF extends Sprite {
     var vo:Object = {};
 
     Console.log('Create Resource with url: ' + newURL);
-
+    Console.log('clipStartTime: ' + this.clipStartTime);
+    Console.log('clipEndTime: ' + this.clipEndTime);
 		//var clipStartTime:Number = NaN;
 		//var clipEndTime:Number = NaN;
 
@@ -309,8 +327,9 @@ public class VideoJSOSMF extends Sprite {
 			{
         //We will need to add in/out points here in the future - mparisi
 				//url = NetUtils.parseProtocol(url, _playerVO);
-				//resource = new StreamingURLResource(LegacySupportUtil.checkRules(url), null, clipStartTime, clipEndTime);
-        _resource = new StreamingURLResource(url, StreamType.LIVE_OR_RECORDED);
+				//_resource = new StreamingURLResource(LegacySupportUtil.checkRules(url), null, clipStartTime, clipEndTime);
+        _resource = new StreamingURLResource(url, StreamType.LIVE_OR_RECORDED, clipStartTime, clipEndTime);
+        StreamingURLResource(_resource).urlIncludesFMSApplicationInstance = urlIncludesFMSApplicationInstance;
 			}
 
   }
@@ -366,9 +385,6 @@ public class VideoJSOSMF extends Sprite {
     switch (event.state) {
       case MediaPlayerState.READY:
           _readyState = 4;
-          if (_mediaPlayer.autoPlay) {
-              onPlayCalled();
-          }
           dispatchExternalEvent('canplay');
         break;
       case MediaPlayerState.PLAYING:
@@ -437,7 +453,7 @@ public class VideoJSOSMF extends Sprite {
   }
   private function handleScriptCommand(cmd:Object):void
   {
-    Console.log('ScriptCommand', cmd.toString());
+    //Console.log('ScriptCommand', cmd.toString());
     if(ExternalInterface.available)
     {
       //ExternalInterface.call("videojs.Osmf.Flash_ScriptCommand", cmd.toString());
@@ -447,7 +463,7 @@ public class VideoJSOSMF extends Sprite {
   }
   private function handleOverlay(cmd:Object):void
   {
-    Console.log('OverlayCommand', cmd.toString());
+    //Console.log('OverlayCommand', cmd.toString());
     if(ExternalInterface.available)
     {
       ExternalInterface.call("videojs.Osmf.NS_OverlayCommand", cmd);
@@ -698,7 +714,7 @@ public class VideoJSOSMF extends Sprite {
             return netStream.decodedFrames;
 
       default:
-        Console.log('Get Prop Called: Not Found', pPropertyName);
+        //Console.log('Get Prop Called: Not Found', pPropertyName);
         break;
     }
   }
