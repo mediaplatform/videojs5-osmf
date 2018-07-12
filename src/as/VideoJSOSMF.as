@@ -329,6 +329,7 @@ public class VideoJSOSMF extends Sprite {
 				//url = NetUtils.parseProtocol(url, _playerVO);
 				//_resource = new StreamingURLResource(LegacySupportUtil.checkRules(url), null, clipStartTime, clipEndTime);
         _resource = new StreamingURLResource(url, StreamType.LIVE_OR_RECORDED, clipStartTime, clipEndTime);
+        StreamingURLResource(_resource).urlIncludesFMSApplicationInstance = urlIncludesFMSApplicationInstance;
 			}
 
   }
