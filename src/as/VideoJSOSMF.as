@@ -77,6 +77,7 @@ public class VideoJSOSMF extends Sprite {
   private var _mediaFactory:MediaFactory;
   private var _resource:StreamingURLResource;
   private var _readyState:Number = 0;
+  private var _loadTrait:NetStreamLoadTrait;
 
   private var _initialBufferTime:Number;
   private var _clipStartTime:Number = NaN;
@@ -111,6 +112,7 @@ public class VideoJSOSMF extends Sprite {
     registerExternalModel();
     createMediaPlayer();
     ready();
+    //Console.log("Parisi VideoJSOSMF");
   }
 
   private function initializeStage():void {
@@ -382,6 +384,10 @@ public class VideoJSOSMF extends Sprite {
 
   private function onMediaPlayerStateChangeEvent(event:MediaPlayerStateChangeEvent):void {
     Console.log('onMediaPlayerStateChangeEvent', event.state.toString());
+    if (event.state == MediaPlayerState.READY || event.state == MediaPlayerState.LOADING)
+    {
+      _loadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
+    }
     switch (event.state) {
       case MediaPlayerState.READY:
           _readyState = 4;
@@ -443,11 +449,22 @@ public class VideoJSOSMF extends Sprite {
     }
   }
 
-  private function onLoadEvent(event:LoadEvent):void {
-    //Console.log('onLoadEvent', event.loadState.toString());
-    switch(event.type) {
+  private function onLoadEvent(evt:LoadEvent):void {
+    //Console.log('onLoadEvent evt.loadState - ', evt.loadState.toString());
+    switch(evt.type) {
       case LoadEvent.LOAD_STATE_CHANGE:
-        dispatchExternalEvent(event.loadState);
+        if(evt.loadState === LoadState.READY)
+        {
+          if(_loadTrait != null)
+          {
+            if(_loadTrait.netStream != null)
+            {
+              NetClient(_loadTrait.netStream.client).addHandler("ScriptCommand", handleScriptCommand);
+              NetClient(_loadTrait.netStream.client).addHandler("OverlayCommand", handleOverlay);
+            }
+          }
+        }
+        dispatchExternalEvent(evt.loadState);
         break;
     }
   }
@@ -510,6 +527,7 @@ public class VideoJSOSMF extends Sprite {
 
   protected function onMediaElementEvent(event:MediaElementEvent):void {
     Console.log('onMediaElementEvent', event.toString());
+    //Console.log('onMediaElementEvent', event.toString());
     switch (event.type) {
       case MediaElementEvent.METADATA_ADD:
         Console.log('MetaData Add', event.metadata);
@@ -537,10 +555,12 @@ public class VideoJSOSMF extends Sprite {
           }
           break;
 	      case MediaTraitType.LOAD:
+          Console.log("Parisi " + loadTrait.netStream);
+          Console.log("Parisi " + loadTrait.connection);
           var loadTrait:NetStreamLoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
 	        loadTrait.addEventListener(LoadEvent.LOAD_STATE_CHANGE, onLoadStateChange);
-          Console.log(loadTrait.netStream);
-          Console.log(loadTrait.connection);
+          Console.log("Parisi " + loadTrait.netStream);
+          Console.log("Parisi " + loadTrait.connection);
 	      break;
           case MediaTraitType.BUFFER:
               if (this.initialBufferTime && this.initialBufferTime > 0) {
@@ -560,14 +580,17 @@ public class VideoJSOSMF extends Sprite {
 
   protected function onLoadStateChange(event: LoadEvent): void
   {
+      Console.log("Parisi onLoadStateChange" + event.loadState);
       switch (event.loadState) {
           case LoadState.LOADING:
 
             break;
           case LoadState.READY:
+            Console.log("Parisi ready");
             //var loadTrait:NetStreamLoadTrait = _mediaPlayer.media.getTrait(MediaTraitType.LOAD) as NetStreamLoadTrait;
             var loadTrait:NetStreamLoadTrait = event.target as NetStreamLoadTrait;
             //Added by Parisi for WC-4743
+            Console.log("loadTrait" + loadTrait);
             if(loadTrait != null)
             {
               var netStream:NetStream = loadTrait.netStream;
@@ -578,7 +601,7 @@ public class VideoJSOSMF extends Sprite {
                 netStream.addEventListener(NetStatusEvent.NET_STATUS, handleNetStatus);
                 loadTrait.connection.addEventListener(NetStatusEvent.NET_STATUS, handleNetStatus);
               }
-
+              Console.log("Adding NetClient Listeners");
               NetClient(loadTrait.netStream.client).addHandler("ScriptCommand", handleScriptCommand);
               NetClient(loadTrait.netStream.client).addHandler("OverlayCommand", handleOverlay);
             }
