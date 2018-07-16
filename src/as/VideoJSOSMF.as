@@ -453,7 +453,7 @@ public class VideoJSOSMF extends Sprite {
   }
   private function handleScriptCommand(cmd:Object):void
   {
-    //Console.log('ScriptCommand', cmd.toString());
+    Console.log('Received ScriptCommand', cmd.toString());
     if(ExternalInterface.available)
     {
       //ExternalInterface.call("videojs.Osmf.Flash_ScriptCommand", cmd.toString());
@@ -463,7 +463,7 @@ public class VideoJSOSMF extends Sprite {
   }
   private function handleOverlay(cmd:Object):void
   {
-    //Console.log('OverlayCommand', cmd.toString());
+    Console.log('Received OverlayCommand', cmd.toString());
     if(ExternalInterface.available)
     {
       ExternalInterface.call("videojs.Osmf.NS_OverlayCommand", cmd);
