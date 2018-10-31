@@ -298,6 +298,7 @@ public class VideoJSOSMF extends Sprite {
 		//var clipEndTime:Number = NaN;
 
     urlIncludesFMSApplicationInstance = NetUtils.parseURLForAppInstance(newURL);
+	Console.log('urlIncludesFMSApplicationInstance: ' + urlIncludesFMSApplicationInstance);
 
     //if(_player.inPoint > 0)clipStartTime = _player.inPoint;
 		//if(_player.outPoint > 0)clipEndTime = _player.outPoint;
